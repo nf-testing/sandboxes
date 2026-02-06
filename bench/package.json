@@ -1,0 +1,26 @@
+{
+  "name": "dust-bench",
+  "version": "1.0.0",
+  "description": "Northflank sandbox cold start latency benchmark",
+  "type": "module",
+  "main": "src/dust_bench_job.ts",
+  "scripts": {
+    "bench": "tsx src/dust_bench_job.ts",
+    "start": "tsx src/dust_bench_job.ts"
+  },
+  "keywords": [
+    "benchmark",
+    "northflank",
+    "sandbox"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@northflank/js-client": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}

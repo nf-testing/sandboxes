@@ -1,0 +1,43 @@
+FROM node:18-alpine
+
+# Install required system dependencies including build tools for native modules
+RUN apk add --no-cache \
+    bash \
+    curl \
+    git \
+    openssh-client \
+    jq \
+    coreutils \
+    crane \
+    python3 \
+    make \
+    g++
+
+# Install Northflank CLI globally (without optional dependencies that may fail)
+RUN npm install -g @northflank/cli --omit=optional
+
+# Create a directory for Northflank config and set permissions
+RUN mkdir -p /root/.northflank && \
+    chmod 700 /root/.northflank
+
+# Set working directory for the bench project
+WORKDIR /app/bench
+
+# Copy package files first for better caching
+COPY package*.json tsconfig.json ./
+
+# Install project dependencies
+RUN npm install
+
+# Copy the source code
+COPY src/ ./src/
+
+# Make the benchmark script executable via npm
+# The script will be run with: npm run bench [args]
+# Example: docker run --rm -e NORTHFLANK_PROJECT_ID=xxx -v ~/.northflank:/root/.northflank:ro dust-bench nf-compute-200
+
+# Set the entrypoint to run the benchmark script
+ENTRYPOINT ["npm", "run", "bench", "--"]
+
+# Default command (pass any additional arguments to the script)
+CMD []
