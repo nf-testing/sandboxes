@@ -1,0 +1,17 @@
+FROM node:18-alpine
+
+# Install required system dependencies
+RUN apk add --no-cache bash curl git openssh-client jq coreutils crane
+
+# Install Northflank CLI globally
+RUN npm install -g @northflank/cli @northflank/js-client
+
+# Create a directory for Northflank config and set permissions
+RUN mkdir -p /root/.northflank && \
+    chmod 700 /root/.northflank
+
+# Set the entrypoint to the Northflank CLI
+ENTRYPOINT ["northflank"]
+
+# Default command (shows help if no command is provided)
+CMD ["--help"]
