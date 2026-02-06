@@ -397,6 +397,7 @@ async function runBenchmark(
   }
 
   // Calculate and print total time
+  let timeWithoutContainerFetch = -1;
   if (sortedLogs.length >= 2) {
     const firstTimestamp = sortedLogs[0].timestamp;
     const lastTimestamp = sortedLogs[sortedLogs.length - 1].timestamp;
@@ -404,7 +405,7 @@ async function runBenchmark(
     console.log(`\nTotal time (first to last event): ${totalTimeMs}ms`);
 
     // Calculate time without container fetch
-    const timeWithoutContainerFetch = execCompletedTime - firstTimestamp.getTime();
+    timeWithoutContainerFetch = execCompletedTime - firstTimestamp.getTime();
     console.log(`Total time (without container fetch): ${timeWithoutContainerFetch}ms`);
   }
 
@@ -413,7 +414,11 @@ async function runBenchmark(
   // await api.delete.service({ parameters: { projectId, serviceId } }).catch(() => {});
   recordStep('Delete service', t0);
 
-  return { timings, success: true, execCompletedTime };
+  return {
+    timings,
+    success: true,
+    execCompletedTime: timeWithoutContainerFetch,
+  };
 }
 
 interface BenchmarkStats {
